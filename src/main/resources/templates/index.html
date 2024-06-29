@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Turniej Sportowy</title>
+    <title>Turniej Rugby</title>
     <link rel="stylesheet" href="/css/styles.css">
 </head>
 <body>
@@ -18,9 +18,29 @@
         <input type="number" id="numberOfGroups" name="numberOfGroups" min="1" max="4" required>
         <button type="submit">Generuj grupy</button>
     </form>
-    <ul>
-        <li th:each="team : ${teams}" th:text="${team.name}"></li>
-    </ul>
+    <div>
+        <h2>Drużyny:</h2>
+        <ul>
+            <li th:each="team : ${teams}">
+                <span th:text="${team.name}">Team Name</span>
+            </li>
+        </ul>
+    </div>
+    <div id="error" th:if="${error}" th:text="${error}"></div>
 </div>
+
+<script>
+    function validateTeamName() {
+        const teamName = document.getElementById('teamName').value.trim().toLowerCase();
+        const teamList = document.querySelectorAll('ul li span');
+        for (const team of teamList) {
+            if (team.textContent.trim().toLowerCase() === teamName) {
+                alert('Nazwa drużyny musi być unikalna');
+                return false;
+            }
+        }
+        return true;
+    }
+</script>
 </body>
 </html>

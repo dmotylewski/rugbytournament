@@ -1,15 +1,10 @@
 package com.example.tournament.controller;
 
-import com.example.tournament.model.Match;
-import com.example.tournament.model.Team;
 import com.example.tournament.service.TournamentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Controller
 public class TournamentController {
@@ -53,8 +48,18 @@ public class TournamentController {
     public String generateFinals(Model model) {
         tournamentService.generateFinals();
         model.addAttribute("finals", tournamentService.getFinals());
-        model.addAttribute("teams", tournamentService.getUniqueTeamsFromFinals());
+        model.addAttribute("semiFinals", tournamentService.getSemiFinals());
+        model.addAttribute("groups", tournamentService.getGroups()); // dodajemy grupy dla tabeli wyników
         return "finals";
+    }
+
+    @PostMapping("/generateFinalMatches")
+    public String generateFinalMatches(Model model) {
+        tournamentService.generateFinalMatches();
+        model.addAttribute("thirdPlaceMatch", tournamentService.getThirdPlaceMatch());
+        model.addAttribute("finalMatch", tournamentService.getFinalMatch());
+        model.addAttribute("groups", tournamentService.getGroups()); // dodajemy grupy dla tabeli wyników
+        return "finalMatches";
     }
 
     @GetMapping("/schedule")
@@ -67,8 +72,17 @@ public class TournamentController {
     @GetMapping("/finals")
     public String finals(Model model) {
         model.addAttribute("finals", tournamentService.getFinals());
-        model.addAttribute("teams", tournamentService.getUniqueTeamsFromFinals());
+        model.addAttribute("semiFinals", tournamentService.getSemiFinals());
+        model.addAttribute("groups", tournamentService.getGroups()); // dodajemy grupy dla tabeli wyników
         return "finals";
+    }
+
+    @GetMapping("/finalMatches")
+    public String finalMatches(Model model) {
+        model.addAttribute("thirdPlaceMatch", tournamentService.getThirdPlaceMatch());
+        model.addAttribute("finalMatch", tournamentService.getFinalMatch());
+        model.addAttribute("groups", tournamentService.getGroups()); // dodajemy grupy dla tabeli wyników
+        return "finalMatches";
     }
 
     @PostMapping("/updateScore")
@@ -81,6 +95,24 @@ public class TournamentController {
     public String updateFinalScore(@RequestParam int matchIndex, @RequestParam int score1, @RequestParam int score2) {
         tournamentService.updateFinalScore(matchIndex, score1, score2);
         return "redirect:/finals";
+    }
+
+    @PostMapping("/updateSemiFinalScore")
+    public String updateSemiFinalScore(@RequestParam int matchIndex, @RequestParam int score1, @RequestParam int score2) {
+        tournamentService.updateSemiFinalScore(matchIndex, score1, score2);
+        return "redirect:/finals";
+    }
+
+    @PostMapping("/updateThirdPlaceMatchScore")
+    public String updateThirdPlaceMatchScore(@RequestParam int matchIndex, @RequestParam int score1, @RequestParam int score2) {
+        tournamentService.updateThirdPlaceMatchScore(matchIndex, score1, score2);
+        return "redirect:/finalMatches";
+    }
+
+    @PostMapping("/updateFinalMatchScore")
+    public String updateFinalMatchScore(@RequestParam int matchIndex, @RequestParam int score1, @RequestParam int score2) {
+        tournamentService.updateFinalMatchScore(matchIndex, score1, score2);
+        return "redirect:/finalMatches";
     }
 
     @GetMapping("/results")

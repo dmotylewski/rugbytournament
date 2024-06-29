@@ -5,12 +5,14 @@ public class Match {
     private Team team2;
     private int score1;
     private int score2;
+    private boolean isFinalized;
 
     public Match(Team team1, Team team2) {
         this.team1 = team1;
         this.team2 = team2;
         this.score1 = 0;
         this.score2 = 0;
+        this.isFinalized = false;
     }
 
     public Team getTeam1() {
@@ -35,5 +37,13 @@ public class Match {
 
     public void setScore2(int score2) {
         this.score2 = score2;
+    }
+
+    public boolean isFinalized() {
+        return isFinalized;
+    }
+
+    public void setFinalized(boolean finalized) {
+        isFinalized = finalized;
     }
 }

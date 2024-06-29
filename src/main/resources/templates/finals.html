@@ -12,13 +12,12 @@
     <div th:each="match, matchStat : ${finals}">
         <form action="/updateFinalScore" method="post">
             <span th:text="${match.team1.name}"></span>
-            <input type="number" name="score1" min="0" th:value="${match.score1}" th:disabled="${match.score1 != 0 || match.score2 != 0}">
+            <input type="number" name="score1" min="0" th:value="${match.score1}" th:disabled="${match.isFinalized}">
             <span>vs</span>
-            <input type="number" name="score2" min="0" th:value="${match.score2}" th:disabled="${match.score1 != 0 || match.score2 != 0}">
+            <input type="number" name="score2" min="0" th:value="${match.score2}" th:disabled="${match.isFinalized}">
             <span th:text="${match.team2.name}"></span>
             <input type="hidden" name="matchIndex" th:value="${matchStat.index}">
-            <button type="submit" th:if="${match.score1 == 0 && match.score2 == 0}">Zapisz wynik</button>
-            <button type="submit" th:if="${match.score1 != 0 || match.score2 != 0}">Edytuj wynik</button>
+            <button type="submit" th:disabled="${match.isFinalized}">Zapisz wynik</button>
         </form>
     </div>
     <form action="/results" method="get">

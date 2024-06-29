@@ -12,13 +12,12 @@
     <div th:each="match, matchStat : ${schedule}">
         <form action="/updateScore" method="post">
             <span th:text="${match.team1.name}"></span>
-            <input type="number" name="score1" min="0" th:value="${match.score1}" th:disabled="${match.score1 != 0 || match.score2 != 0}">
+            <input type="number" name="score1" min="0" th:value="${match.score1}" th:disabled="${match.isFinalized}">
             <span>vs</span>
-            <input type="number" name="score2" min="0" th:value="${match.score2}" th:disabled="${match.score1 != 0 || match.score2 != 0}">
+            <input type="number" name="score2" min="0" th:value="${match.score2}" th:disabled="${match.isFinalized}">
             <span th:text="${match.team2.name}"></span>
             <input type="hidden" name="matchIndex" th:value="${matchStat.index}">
-            <button type="submit" th:if="${match.score1 == 0 && match.score2 == 0}">Zapisz wynik</button>
-            <button type="submit" th:if="${match.score1 != 0 || match.score2 != 0}">Edytuj wynik</button>
+            <button type="submit" th:disabled="${match.isFinalized}">Zapisz wynik</button>
         </form>
     </div>
     <form action="/generateFinals" method="post">
@@ -26,9 +25,32 @@
     </form>
     <h2>Tablica punktów</h2>
     <ul>
-        <li th:each="team : ${teams}"
-            th:text="${team.name + ': ' + team.points + ' pkt'}"></li>
+        <li th:each="team : ${teams}">
+            <span th:text="${team.name}"></span>
+            <span th:text="' : ' + ${team.points} + ' pkt'"></span>
+            <span th:text="' | ' + ${team.goals} + ' punkty mniejsze'"></span>
+        </li>
     </ul>
+    <h2>Grupy</h2>
+    <div th:each="group, groupStat : ${groups}">
+        <h3 th:text="'Grupa ' + (${groupStat.index} + 1)"></h3>
+        <table>
+            <thead>
+            <tr>
+                <th>Drużyna</th>
+                <th>Punkty</th>
+                <th>Punkty mniejsze</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="team : ${group}">
+                <td th:text="${team.name}"></td>
+                <td th:text="${team.points}"></td>
+                <td th:text="${team.goals}"></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
 </div>
 </body>
 </html>
