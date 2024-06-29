@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Turniej Sportowy</title>
+    <link rel="stylesheet" href="/css/styles.css">
+</head>
+<body>
+<div id="app">
+    <h1>Turniej Rugby</h1>
+    <form action="/addTeam" method="post">
+        <input type="text" name="teamName" placeholder="Nazwa drużyny" required>
+        <button type="submit">Dodaj drużynę</button>
+    </form>
+    <form action="/generateGroups" method="post">
+        <label for="numberOfGroups">Ilość grup:</label>
+        <input type="number" id="numberOfGroups" name="numberOfGroups" min="1" max="4" required>
+        <button type="submit">Generuj grupy</button>
+    </form>
+    <ul>
+        <li th:each="team : ${teams}" th:text="${team.name}"></li>
+    </ul>
+</div>
+</body>
+</html>
